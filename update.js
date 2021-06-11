@@ -1,81 +1,64 @@
-function convert(temp_value, inputFrom, inputTo){
-    switch(inputFrom){
-        case 'Celsius':
-            switch(inputTo){
-                case 'Celsius':
-                    return 1*temp_value;
-                case 'Fahrenheit':
-                    return ((1*temp_value)-32)*(5/9);
-                case 'Kelvin':
-                    return 1*temp_value+273.15;
-            }
-        case 'Fahrenheit': 
-            switch(inputTo){
-                case 'Celsius':
-                    return (5*(1*temp_value-32))/9;
-                case 'Fahrenheit':
-                    return 1*temp_value;
-                case 'Kelvin':
-                    return (5*(1*temp_value-32)/9 + 273.15);
-            }
-        case 'Kelvin': 
-            switch(inputTo){
-                case 'Celsius':
-                    return 1*temp_value-273.15;
-                case 'Fahrenheit':
-                    return (9*(1*temp_value-273.15)/5 + 32);
-                case 'Kelvin':
-                    return 1*temp_value;
-            }
-    }
+const FUNCTIONS = {
+    'Add City': addCity,
+    'Update City': updateCity,
+    'Delete City': deleteCity
+}
 
+function addCity(cities){
+    return dictionary(model, cities)
+}
+
+function deleteCity(cities, input2){
+    var index = cities.map(function(o) { return o.Name; }).indexOf(input2);
+    cities.splice(index,1)
+    return cities
+}
+
+function updateCity(cities, input2){
+    var index = cities.map(function(o) { return o.Name; }).indexOf(input2);
+    
 }
 
 
-function update(input1, input, input4, input5, model){
-    const {left_value} = model
-    const {left_unit} = model
-    const {right_value} = model
-    const {right_unit} = model
-    if (input1 === 'Y'){
-        const new_left_value = input
-        const new_left_unit = input4
-        const new_right_value = convert(input, input4, input5)
-        const new_right_unit = input5
+function update(input1, input2, model){
+    const {Name} = model
+    const {Temperature} = model
+    const {Max} = model
+    const {Min} = model
+    const {cities} = model
+    if (input1 === 'Add City'){
+        const new_Name = input2
+        const new_Temperature =  Math.floor(Math.random() * 100)
+        const new_Max =  Math.floor(Math.random() * 100)
+        const new_Min =  Math.floor(Math.random() * 100)
+        const new_cities = dictionary
         return {
             ...model,
-            left_value: new_left_value,
-            left_unit: new_left_unit,
-            right_value: new_right_value,
-            right_unit: new_right_unit,
-            input1: 'Y/n',
-            input2: new_left_value,
-            input3: new_right_value,
-            input4: input4,
-            input5: input5
+            Name: new_Name,
+            Temperature: new_Temperature,
+            Max: new_Max,
+            Min: new_Min,
+            cities: cities.push(new_Name)
         }
     }
-    else if (input1 === 'n')
+    else if (input1 === 'Update City')
     {
-        const new_left_value = convert(input, input4, input5)
-        const new_left_unit = input5
-        const new_right_value = input
-        const new_right_unit = input4
+        const new_Temperature =  Math.floor(Math.random() * 100)
+        const new_Max =  Math.floor(Math.random() * 100)
+        const new_Min =  Math.floor(Math.random() * 100)
         return {
             ...model,
-            left_value: new_left_value,
-            left_unit: new_left_unit,
-            right_value: new_right_value,
-            right_unit: new_right_unit,
-            input1: 'Y/n',
-            input2: new_left_value,
-            input3: new_right_value,
-            input4: input4,
-            input5: input5,
+            Name: new_Name,
+            Temperature: new_Temperature,
+            Max: new_Max,
+            Min: new_Min,
+            cities: cities.push(new_Name)
         }
     }   
     
 }
+
+
 
 module.exports = {
     update
