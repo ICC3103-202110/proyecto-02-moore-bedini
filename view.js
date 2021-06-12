@@ -1,7 +1,7 @@
 const figlet = require('figlet')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
-
+const d=[{}]
 function getTitle(){
     return chalk.yellow(
         figlet.textSync(
@@ -13,18 +13,19 @@ function getTitle(){
         )
     )
 }
-
-function getTable(model){
+function dictionary(model, d){
     const {city} = model
     const {temp} = model
-    const {max}= model
     const {min}= model
-    return [
-        {Name: city, 
-        Temperature: temp,
-        Max: max,
-        Min: min}
-    ]
+    const {max}= model
+    row={Name: city, Temperature: temp, Max: max, Min: min}
+    d.push(row)
+    return d
+    }
+
+function getTable(model){
+    const dictionaryUpdate=dictionary(model,d)
+    return dictionaryUpdate
 }
 
 function inputForm(model){
@@ -36,42 +37,47 @@ function inputForm(model){
             type: 'city',
             message: message,
             default: city,
-            validate: function(value){
-                if(len(value) === 0){
-                    return true
-                } else {
-                    return 'No city added, add one'
-                }
-            }},
-    )}
-
-function listForm(model, cities){
-    const {cities}= model
-    if (len(cities)!==0){
-        choices=['Add city', 'Update city','Delete city']
-    }
-    else {
-        choices=['Add city']
-    }
-    const message1 = 'Select Action: '
-    const choices1=choices
-    return inquirer.prompt({
-            name: 'cities',
-            type: 'cities',
-            message: message1,
-            default: cities,
-            validate: function(value){
-                if(len(value) !== 0){
-                    return true
-                } else {
-                    return 'No city added, add one'
-                }
-            },
-            choices: choices1
-        })
+        }
+    )
 }
 
+function listForm(model){
+    const {action} = model
+    const message = 'Select Action'
+    const choices = ['Add City', 'Delete City','Update City']
+    return inquirer.prompt({
+        name: 'action',
+        type: 'list',
+        message: message,
+        default: action,
+        choices: choices,
+    })
+}
 
+function listDelete(model){
+    const {action} = model
+    const message = 'Select Action'
+    const choices = ['Add City', 'Delete City','Update City']
+    return inquirer.prompt({
+        name: 'action',
+        type: 'list',
+        message: message,
+        default: action,
+        choices: choices,
+    })
+}
+function listUpdate(model){
+    const {action} = model
+    const message = 'Select Action'
+    const choices = ['Add City', 'Delete City','Update City']
+    return inquirer.prompt({
+        name: 'action',
+        type: 'list',
+        message: message,
+        default: action,
+        choices: choices,
+    })
+}
 function view(model){
     return {
         title: getTitle(),
@@ -83,4 +89,6 @@ module.exports = {
     view, 
     inputForm,
     listForm,
+    listDelete,
+    listUpdate,
 }

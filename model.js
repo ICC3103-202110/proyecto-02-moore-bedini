@@ -1,9 +1,9 @@
 initModel = {
     city: 'Santiago',
-    cities: [],
-    temp: 20,
-    max: 28,
-    min: 10,
+    temp: 10,
+    max: 32,
+    min: 2,
+    action: 'Add City',
 }
 
 module.exports = {
