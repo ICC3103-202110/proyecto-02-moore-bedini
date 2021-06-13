@@ -21,6 +21,7 @@ async function app(state, update, view){
         }
         else {
             const {city} = await listDeleteUpdate(model)
+            console.log(city)
             const updatedModel = update(action, city, model)
             state = {
                 ...state,
