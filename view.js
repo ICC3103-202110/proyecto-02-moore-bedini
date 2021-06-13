@@ -1,7 +1,6 @@
 const figlet = require('figlet')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
-const d=[{}]
 function getTitle(){
     return chalk.yellow(
         figlet.textSync(
@@ -13,18 +12,19 @@ function getTitle(){
         )
     )
 }
-function dictionary(model, d){
+function dictionary(model){
     const {city} = model
     const {temp} = model
     const {min}= model
     const {max}= model
+    const {dictio}= model
     row={Name: city, Temperature: temp, Max: max, Min: min}
-    d.push(row)
-    return d
+    dictio.push(row)
+    return dictio
     }
 
 function getTable(model){
-    const dictionaryUpdate=dictionary(model,d)
+    const dictionaryUpdate=dictionary(model)
     return dictionaryUpdate
 }
 
@@ -43,41 +43,37 @@ function inputForm(model){
 
 function listForm(model){
     const {action} = model
+    const {cities}=model
+    if ((cities.length)===0){
+        choices= ['Add City']
+    }
+    else {
+        choices = ['Add City', 'Delete City','Update City']
+    }
     const message = 'Select Action'
-    const choices = ['Add City', 'Delete City','Update City']
+    const choicesUpdated = choices
     return inquirer.prompt({
         name: 'action',
         type: 'list',
         message: message,
         default: action,
-        choices: choices,
+        choices: choicesUpdated,
     })
 }
 
-function listDelete(model){
+function listDeleteUpdate(model){
     const {action} = model
-    const message = 'Select Action'
-    const choices = ['Add City', 'Delete City','Update City']
+    const {cities}= model
+    const message = 'Which one?'
     return inquirer.prompt({
         name: 'action',
         type: 'list',
         message: message,
         default: action,
-        choices: choices,
+        choices: cities,
     })
 }
-function listUpdate(model){
-    const {action} = model
-    const message = 'Select Action'
-    const choices = ['Add City', 'Delete City','Update City']
-    return inquirer.prompt({
-        name: 'action',
-        type: 'list',
-        message: message,
-        default: action,
-        choices: choices,
-    })
-}
+
 function view(model){
     return {
         title: getTitle(),
@@ -89,6 +85,5 @@ module.exports = {
     view, 
     inputForm,
     listForm,
-    listDelete,
-    listUpdate,
+    listDeleteUpdate,
 }

@@ -4,6 +4,8 @@ initModel = {
     max: 32,
     min: 2,
     action: 'Add City',
+    cities: ['Santiago'],
+    dictio: [{}]
 }
 
 module.exports = {
