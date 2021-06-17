@@ -19,7 +19,6 @@ async function app(state, update, view){
             await axios
                 .get(FULL_API_URL)
                 .then(response => {
-                    console.log('hola')
                     const temperatureK = response.data.main.temp;
                     const temperatureMin= response.data.main.temp_min;
                     const temperatureMax= response.data.main.temp_max;
@@ -34,18 +33,29 @@ async function app(state, update, view){
                         currentView: view(updatedModel)
             }
         })}
-        else {
+        else{
             const {city} = await listDeleteUpdate(model)
-            console.log(city)
-            const updatedModel = update(action, cityName, model, temperatureCelsius, temperatureMaxCelsius, temperatureMinCelsius)
-            state = {
-                ...state,
-                model: updatedModel,
-                currentView: view(updatedModel)
+            const LOCATION_NAME = city;
+            const FULL_API_URL  = `${API_URL}?q=${LOCATION_NAME}&appid=${API_KEY}`;
+            await axios
+                .get(FULL_API_URL)
+                .then(response => {
+                    const temperatureK = response.data.main.temp;
+                    const temperatureMin= response.data.main.temp_min;
+                    const temperatureMax= response.data.main.temp_max;
+                    const cityName = response.data.name;
+                    const temperatureCelsius = temperatureK - 273.15;
+                    const temperatureMinCelsius = temperatureMin - 273.15;
+                    const temperatureMaxCelsius = temperatureMax - 273.15;
+                    const updatedModel = update(action, cityName, model, temperatureCelsius, temperatureMaxCelsius, temperatureMinCelsius)
+                    state = {
+                        ...state,
+                        model: updatedModel,
+                        currentView: view(updatedModel)
             }
-        }
-    }
-    }
+        })
+    }}
+}
 module.exports = {
     app
 }

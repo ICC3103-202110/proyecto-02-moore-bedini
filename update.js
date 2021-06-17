@@ -4,8 +4,6 @@ function update(action, cityName, model, temperatureCelsius, temperatureMaxCelsi
     if (action==='Add City'){
         const row={Name: cityName, Temperature: temperatureCelsius, Max: temperatureMaxCelsius, Min: temperatureMinCelsius}
         dictio.push(row)
-        console.log(row)
-        console.log(dictio)
         cities.push(cityName)
         return {
             ...model,
@@ -32,23 +30,11 @@ function update(action, cityName, model, temperatureCelsius, temperatureMaxCelsi
     }
     else if (action==='Update City'){
         var index = dictio.findIndex(function (position) {
-            return position.Name === city;
+            return position.Name === cityName;
         });
-        const LOCATION_NAME = city;
-        const FULL_API_URL  = `${API_URL}?q=${LOCATION_NAME}&appid=${API_KEY}`;
-        axios
-        .get(FULL_API_URL)
-        .then(response => {
-            const temperatureK = response.data.main.temp;
-            const temperatureMin= response.data.main.temp_min;
-            const temperatureMax= response.data.main.temp_max;
-            const cityName     = response.data.name;
-            const temperatureCelsius = temperatureK - 273.15;
-            const temperatureMinCelsius = temperatureMin - 273.15;
-            const temperatureMaxCelsius = temperatureMax - 273.15;
-            const updateTemp =dictio[index].Temperature = temperatureCelsius
-            const updateMax= dictio[index].Max = temperatureMaxCelsius
-            const updateMin= dictio[index].Min = temperatureMinCelsius
+        const updateTemp =dictio[index].Temperature = temperatureCelsius
+        const updateMax= dictio[index].Max = temperatureMaxCelsius
+        const updateMin= dictio[index].Min = temperatureMinCelsius
             return {
                 ...model,
                 city: cityName,
@@ -58,7 +44,6 @@ function update(action, cityName, model, temperatureCelsius, temperatureMaxCelsi
                 cities: cities,
                 dictio: dictio,
         }
-        })
         
     }
 }       
