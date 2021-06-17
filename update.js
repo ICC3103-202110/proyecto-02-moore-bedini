@@ -1,32 +1,28 @@
-function update(action, city, model){
+function update(action, cityName, model, temperatureCelsius, temperatureMaxCelsius, temperatureMinCelsius){
     const {dictio}=model
     const {cities} = model
-    console.log(dictio)
     if (action==='Add City'){
-        const newCity = city
-        const newTemperature = Math.floor(Math.random() * (50 - -10) + -10)
-        const newMax =  Math.floor(Math.random() * (60 - 30) + 30)
-        const newMin =  Math.floor(Math.random() * (-1 - -72) + -72)
-        row={Name: newCity, Temperature: newTemperature, Max: newMax, Min: newMin}
+        const row={Name: cityName, Temperature: temperatureCelsius, Max: temperatureMaxCelsius, Min: temperatureMinCelsius}
         dictio.push(row)
-        cities.push(city)
+        console.log(row)
+        console.log(dictio)
+        cities.push(cityName)
         return {
             ...model,
-            city: newCity,
-            temp: newTemperature,
-            max: newMax,
-            min: newMin,
+            city: cityName,
+            temp: temperatureCelsius,
+            max: temperatureMaxCelsius,
+            min: temperatureMinCelsius,
             cities: cities,
             dictio: dictio
-        }
-    }
+            }}
     else if (action=='Delete City'){
-        var cityIndex= city
+        var cityIndex= cityName
         var index = dictio.findIndex(function (position) {
             return position.Name === cityIndex;
         });
         dictio.splice(index,1)
-        var i = cities.indexOf(city)
+        var i = cities.indexOf(cityName)
         cities.splice(i,1)
         return {
             ...model,
@@ -38,18 +34,32 @@ function update(action, city, model){
         var index = dictio.findIndex(function (position) {
             return position.Name === city;
         });
-        const updateTemp =dictio[index].Temperature = Math.floor(Math.random() * (50 - -10) + -10)
-        const updateMax= dictio[index].Max = Math.floor(Math.random() * (60 - 30) + 30)
-        const updateMin= dictio[index].Min = Math.floor(Math.random() * (-1 - -72) + -72)
-        return {
-            ...model,
-            city: city,
-            temp: updateTemp,
-            max: updateMax,
-            min: updateMin,
-            cities: cities,
-            dictio: dictio,
+        const LOCATION_NAME = city;
+        const FULL_API_URL  = `${API_URL}?q=${LOCATION_NAME}&appid=${API_KEY}`;
+        axios
+        .get(FULL_API_URL)
+        .then(response => {
+            const temperatureK = response.data.main.temp;
+            const temperatureMin= response.data.main.temp_min;
+            const temperatureMax= response.data.main.temp_max;
+            const cityName     = response.data.name;
+            const temperatureCelsius = temperatureK - 273.15;
+            const temperatureMinCelsius = temperatureMin - 273.15;
+            const temperatureMaxCelsius = temperatureMax - 273.15;
+            const updateTemp =dictio[index].Temperature = temperatureCelsius
+            const updateMax= dictio[index].Max = temperatureMaxCelsius
+            const updateMin= dictio[index].Min = temperatureMinCelsius
+            return {
+                ...model,
+                city: cityName,
+                temp: updateTemp,
+                max: updateMax,
+                min: updateMin,
+                cities: cities,
+                dictio: dictio,
         }
+        })
+        
     }
 }       
 module.exports={
