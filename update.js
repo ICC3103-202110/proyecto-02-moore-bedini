@@ -50,5 +50,3 @@ function update(action, cityName, model, temperatureCelsius, temperatureMaxCelsi
 module.exports={
     update
 }
-
-

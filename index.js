@@ -7,5 +7,4 @@ const state = {
     model: initModel,
     currentView: view(initModel)
 }
-
 app(state, update, view)

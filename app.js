@@ -3,7 +3,6 @@ const {printTable} = require('console-table-printer')
 const axios= require('axios')
 const API_URL       = 'https://api.openweathermap.org/data/2.5/weather';
 const API_KEY       = 'd8c88ed8949052ac66898d9946a45d68';
-
 async function app(state, update, view){
     while (true){
         const {model, currentView} = state
